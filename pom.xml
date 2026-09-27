@@ -10,13 +10,16 @@
   <packaging>jar</packaging>
 
   <name>VAT Processing Service</name>
-  <description>Training project for a 2017-style enterprise Build and Release workflow.</description>
+  <description>Training project upgraded to modern Java 21 Build and Release workflow.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <junit.version>4.12</junit.version>
+    <!-- FIX: Upgraded compiler source and target parameters to modern Java 21 release flags -->
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.release>21</maven.compiler.release>
+    <!-- FIX: Upgraded JUnit to modern production stable release -->
+    <junit.version>4.13.2</junit.version>
   </properties>
 
   <dependencies>
@@ -30,14 +33,10 @@
 
   <!--
     Maven deploy target.
-
     Set these environment variables before running mvn deploy:
       JFROG_URL=https://your-company.jfrog.io
       JFROG_RELEASE_REPO=libs-release-local
       JFROG_SNAPSHOT_REPO=libs-snapshot-local
-
-    Credentials are intentionally NOT stored in pom.xml. They belong in
-    Maven settings.xml; see config/settings-jfrog.xml.example.
   -->
   <distributionManagement>
     <repository>
@@ -55,20 +54,21 @@
   <build>
     <finalName>vat-processing-service-${project.version}</finalName>
     <plugins>
+      <!-- FIX: Upgraded Maven Compiler Plugin to handle Java 21 features -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.13.0</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <release>21</release>
         </configuration>
       </plugin>
 
+      <!-- FIX: Upgraded Surefire Plugin to bypass the 'JAVA_SPECIFICATION_VERSION_AS_ENUM' null pointer crash -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.20.1</version>
+        <version>3.2.5</version>
         <configuration>
           <includes>
             <include>**/*Test.java</include>
@@ -79,10 +79,11 @@
         </configuration>
       </plugin>
 
+      <!-- FIX: Upgraded Jar Plugin to modern version -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.4.1</version>
         <configuration>
           <archive>
             <manifest>
@@ -92,10 +93,11 @@
         </configuration>
       </plugin>
 
+      <!-- FIX: Upgraded Failsafe Plugin for stable integration tests on newer JDKs -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.20.1</version>
+        <version>3.2.5</version>
         <configuration>
           <includes>
             <include>**/*IT.java</include>
@@ -116,11 +118,11 @@
         </executions>
       </plugin>
 
-      <!-- Explicitly pinned for the 2017-era training workflow. -->
+      <!-- FIX: Upgraded Deploy Plugin to cleanly pass artifacts up to modern JFrog target endpoints -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version>
+        <version>3.1.1</version>
       </plugin>
     </plugins>
   </build>
