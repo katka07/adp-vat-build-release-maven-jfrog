@@ -1,0 +1,16 @@
+digraph architecture {
+  rankdir=LR;
+  graph [fontname="Arial", labelloc="t", label="VAT Processing JAR - Build & Release Scope"];
+  node [shape=box, style="rounded", fontname="Arial"];
+  input [label="Invoice / Batch CSV"];
+  jar [label="vat-processing-service-1.0.0.jar"];
+  calc [label="VAT Calculation Engine\nGB / DE / FR\nStandard / Reduced / Zero / Reverse Charge"];
+  batch [label="Batch Aggregator"];
+  report [label="VAT Return JSON"];
+  sqa [label="SQA\nFull Functional / Regression"];
+  input -> jar;
+  jar -> calc;
+  jar -> batch;
+  batch -> report;
+  jar -> sqa [style=dashed, label="qualified artifact"];
+}

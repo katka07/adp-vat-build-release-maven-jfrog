@@ -1,0 +1,17 @@
+digraph releaseflow {
+  rankdir=TB;
+  graph [fontname="Arial", labelloc="t", label="Maven Build & Release -> JFrog Artifactory -> SQA"];
+  node [shape=box, style="rounded", fontname="Arial"];
+  source [label="Git Commit"];
+  deploy [label="mvn clean deploy"];
+  unit [label="Surefire\nUnit Tests"];
+  package [label="Versioned\nExecutable JAR"];
+  smoke [label="Failsafe Smoke IT\nRuns Actual JAR"];
+  integration [label="Failsafe Integration IT\nActual JAR + Approved CSV"];
+  verify [label="Maven verify PASSED"];
+  upload [label="Maven deploy\nUpload JAR + POM"];
+  jfrog [label="JFrog Artifactory\nlibs-release-local"];
+  evidence [label="SHA-256 + Build Metadata\nSurefire/Failsafe Reports"];
+  sqa [label="SQA Handover\nFull Functional / Regression"];
+  source -> deploy -> unit -> package -> smoke -> integration -> verify -> upload -> jfrog -> evidence -> sqa;
+}
